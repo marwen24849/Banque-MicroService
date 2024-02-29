@@ -1,0 +1,71 @@
+services:
+  discovery:
+    build: ./Discovery_Service
+    container_name: discovery
+    ports:
+      - '8761:8761'
+    expose:
+      - '8761'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+  configuration:
+    build: ./Config_Server
+    container_name: config
+    ports:
+      - '8888:8888'
+    expose:
+      - '8888'
+    depends_on:
+      discovery:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 10s
+  getway:
+    build: ./Getway
+    container_name: getway
+    ports:
+      - '8887:8887'
+    expose:
+      - '8887'
+    environment:
+      - DSCOVERY_URL=http://discovery:8761/eureka
+    depends_on:
+      configuration:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8887/actuator/health"]
+      interval: 10s
+  customer:
+    build: ./customer-Service
+    container_name: customer
+    ports:
+      - '8095:8095'
+    expose:
+      - '8095'
+    environment:
+      - DSCOVERY_URL=http://discovery:8761/eureka
+      - CONFIG=http://configuration:8888/
+    depends_on:
+      configuration:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8095/actuator/health"]
+      interval: 15s
+  account:
+    build: ./Account-Service
+    container_name: account
+    ports:
+      - '8096:8096'
+    expose:
+      - '8096'
+    environment:
+      - DSCOVERY_URL=http://discovery:8761/eureka
+      - CONFIG=http://configuration:8888
+    depends_on:
+      configuration:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8096/actuator/health"]
+      interval: 15s

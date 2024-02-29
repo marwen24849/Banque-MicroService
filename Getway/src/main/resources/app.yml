@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id : r1
+          uri: http://localhost:8095/
+          predicates:
+            - Path=/customer/**
+        - id : r2
+          uri: http://localhost:8096/
+          predicates:
+            - Path=/Account/**
+  application:
+    name: Gateway-Service
+server:
+  port: 8887
