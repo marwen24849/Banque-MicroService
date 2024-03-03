@@ -1,0 +1,21 @@
+Pour le service client (Client Service), voici une description détaillée de notre configuration et de nos fonctionnalités :
+
+**Dépendances Utilisées** :
+- Nous avons inclus plusieurs dépendances importantes pour notre service client :
+  - `spring-boot-starter-actuator` : Fournit des fonctionnalités de supervision et de gestion de l'application Spring Boot.
+  - `spring-boot-starter-web` : Permet de développer des applications Web à l'aide de Spring MVC et de Tomcat embarqué.
+  - `spring-boot-starter-data-jpa` : Fournit le support de JPA (Java Persistence API) pour l'accès aux données relationnelles.
+  - `spring-cloud-starter-netflix-eureka-client` : Intègre le service client Eureka pour la découverte des services dans un environnement distribué.
+  - `spring-cloud-starter-circuitbreaker-resilience4j` : Introduit le support du circuit breaker de Resilience4j pour gérer les défaillances dans les appels de service.
+  - `spring-cloud-starter-openfeign` : Intègre Feign, un client HTTP déclaratif pour simplifier les appels de service REST.
+
+**Configuration de Feign et Circuit Breaker** :
+- Nous avons utilisé Feign pour simplifier les appels aux services REST. La classe `CustomerrestClient` définit les méthodes d'appel aux services distants à l'aide d'annotations, telles que `@FeignClient` et `@GetMapping`.
+- Le circuit breaker de Resilience4j est utilisé pour gérer les défaillances lors des appels de service. La méthode `getDefaultCustomer` sert de méthode de secours lorsqu'une défaillance se produit.
+
+**Contrôleurs REST** :
+- Le contrôleur `Controller` expose les endpoints REST pour interagir avec les comptes bancaires.
+- Les méthodes `getAll`, `getById`, `addAccount`, `update`, et `delete` permettent de récupérer tous les comptes, de récupérer un compte par son ID, d'ajouter, de mettre à jour et de supprimer un compte respectivement.
+- Le client Feign est utilisé pour récupérer les informations des clients en fonction de leur ID, qui sont ensuite associées aux comptes bancaires.
+
+Cette configuration et ces fonctionnalités permettent à notre service client de communiquer efficacement avec d'autres services, tout en offrant des mécanismes de récupération en cas de défaillance des services distants.

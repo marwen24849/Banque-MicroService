@@ -1,0 +1,13 @@
+Pour le service de découverte (Discovery Service), nous avons utilisé les dépendances suivantes :
+
+1. **spring-boot-starter-actuator** : Cette dépendance fournit des fonctionnalités de supervision et de gestion de l'application Spring Boot. Elle permet d'obtenir des informations sur l'état de l'application, telles que les métriques, les informations sur la santé et les détails sur les requêtes.
+
+2. **spring-cloud-starter-netflix-eureka-server** : Cette dépendance est spécifique à Spring Cloud et est utilisée pour créer un serveur Eureka. Eureka est un service de découverte qui permet aux microservices de s'enregistrer et de découvrir les autres services disponibles dans l'environnement.
+
+3. **spring-boot-starter-test** : Cette dépendance fournit les outils nécessaires pour écrire et exécuter des tests unitaires pour notre application Spring Boot. Les tests unitaires sont essentiels pour garantir la qualité du code et la fiabilité de l'application.
+
+La classe principale `DiscoveryServiceApplication` est annotée avec `@SpringBootApplication` pour indiquer qu'il s'agit de la classe principale de notre application Spring Boot. De plus, l'annotation `@EnableEurekaServer` est utilisée pour activer le serveur Eureka.
+
+Les propriétés de configuration définies dans le fichier `application.properties` incluent des paramètres tels que le port sur lequel le serveur fonctionnera, ainsi que des configurations spécifiques à Eureka, telles que la désactivation de l'enregistrement automatique et la récupération du registre Eureka.
+
+Cette configuration permet à notre service de découverte d'exécuter un serveur Eureka qui peut être utilisé par d'autres microservices pour s'enregistrer et découvrir les services disponibles dans l'écosystème.

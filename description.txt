@@ -1,0 +1,29 @@
+Ce fichier compose-compose.yml définit la configuration de plusieurs services Docker, chacun correspondant à un microservice spécifique de notre architecture. Voici une explication détaillée de chaque service :
+
+**Service Discovery** :
+- Ce service est responsable de la découverte et de l'enregistrement des autres services dans l'environnement. Il utilise le port 8761 pour écouter les requêtes d'enregistrement.
+- Le service est construit à partir du répertoire `./Discovery_Service`.
+- Il expose le port 8761 pour permettre aux autres services de s'y connecter.
+- Un healthcheck est configuré pour vérifier régulièrement la santé du service en interrogeant l'endpoint `/actuator/health`.
+
+**Service Configuration** :
+- Ce service est responsable de la gestion centralisée de la configuration des autres services. Il utilise le port 8888 pour fournir les configurations.
+- Il dépend du service Discovery pour s'assurer que le service Discovery est en bonne santé avant de démarrer.
+- Un healthcheck est également configuré pour vérifier régulièrement la santé du service en interrogeant l'endpoint `/actuator/health`.
+
+**Service Gateway** :
+- Ce service agit comme un point d'entrée unique pour toutes les requêtes externes entrantes vers notre système. Il utilise le port 8887 pour écouter les requêtes.
+- Il dépend du service Configuration pour s'assurer que le service Configuration est en bonne santé avant de démarrer.
+- Un healthcheck est configuré pour vérifier régulièrement la santé du service en interrogeant l'endpoint `/actuator/health`.
+
+**Service Customer** :
+- Ce service gère les informations relatives aux clients. Il utilise le port 8095 pour écouter les requêtes.
+- Il dépend du service Configuration pour s'assurer que le service Configuration est en bonne santé avant de démarrer.
+- Un healthcheck est configuré pour vérifier régulièrement la santé du service en interrogeant l'endpoint `/actuator/health`.
+
+**Service Account** :
+- Ce service gère les informations relatives aux comptes bancaires. Il utilise le port 8096 pour écouter les requêtes.
+- Il dépend du service Configuration pour s'assurer que le service Configuration est en bonne santé avant de démarrer.
+- Un healthcheck est configuré pour vérifier régulièrement la santé du service en interrogeant l'endpoint `/actuator/health`.
+
+Cette configuration garantit que chaque service Docker est correctement intégré à l'écosystème, qu'il est enregistré auprès du service Discovery et qu'il peut accéder aux configurations nécessaires à partir du service Configuration. De plus, les healthchecks assurent que chaque service est opérationnel et fonctionne correctement.

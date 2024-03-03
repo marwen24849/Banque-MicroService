@@ -1,0 +1,17 @@
+Dans le cadre du développement de notre microservice de configuration (Config Server), nous avons utilisé les dépendances suivantes :
+
+1. **spring-boot-starter-actuator** : Cette dépendance permet d'intégrer des fonctionnalités de supervision et de gestion de l'application Spring Boot, offrant ainsi des mécanismes de surveillance et de gestion des performances.
+
+2. **spring-cloud-config-server** : Cette dépendance est essentielle pour créer un serveur de configuration Spring Cloud. Ce serveur centralise la gestion des configurations et permet à d'autres microservices de récupérer leurs configurations à partir d'une source unique, simplifiant ainsi la gestion et le déploiement des configurations.
+
+3. **spring-cloud-starter-netflix-eureka-client** : Utilisé pour intégrer le client Eureka Netflix, cette dépendance permet à notre microservice de s'enregistrer auprès du service de découverte Eureka. Cela facilite la résolution des adresses et la gestion des instances de microservices.
+
+4. **spring-boot-starter-test** : Cette dépendance fournit les outils nécessaires pour écrire et exécuter des tests unitaires pour notre application Spring Boot, ce qui est crucial pour garantir la qualité du code et la fiabilité de l'application.
+
+En outre, nous avons utilisé la gestion des dépendances Spring Cloud pour garantir la compatibilité des versions des dépendances Spring Cloud dans notre application.
+
+La classe principale `ConfigServerApplication` est annotée avec `@SpringBootApplication` pour indiquer qu'il s'agit de la classe principale de notre application Spring Boot. De plus, l'annotation `@EnableConfigServer` est utilisée pour activer le serveur de configuration.
+
+Les propriétés de configuration définies dans le fichier `application.properties` incluent des paramètres tels que le nom de l'application, le port sur lequel le serveur fonctionnera, l'URI du référentiel Git contenant les fichiers de configuration, ainsi que des configurations spécifiques à Eureka et à la découverte des services.
+
+Enfin, le fichier Dockerfile spécifie les étapes pour créer une image Docker contenant notre application. Il utilise une image Docker basée sur OpenJDK 17, copie le fichier JAR généré dans le conteneur Docker, et définit cet artefact JAR comme point d'entrée pour l'exécution de l'application dans le conteneur.

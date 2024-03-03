@@ -1,0 +1,47 @@
+Pour le module de passerelle (Gateway), nous avons sélectionné un ensemble de dépendances essentielles pour fournir les fonctionnalités requises par notre application. Voici une analyse détaillée de chaque dépendance et de sa contribution à notre projet :
+
+1. **spring-boot-starter-actuator** :
+   Cette dépendance fournit des fonctionnalités de supervision et de gestion pour notre application Spring Boot. Elle permet d'accéder à des informations sur l'état de l'application via des endpoints RESTful. Ces informations comprennent des métriques sur les performances, la santé de l'application, les détails sur les requêtes entrantes et sortantes, etc. L'actuateur joue un rôle crucial dans le suivi et le débogage des applications en fournissant une visibilité en temps réel sur leur état et leurs performances.
+
+2. **spring-boot-starter-web** :
+   Cette dépendance est utilisée pour créer des applications web avec Spring Boot. Elle inclut les composants nécessaires pour développer des API REST et des applications web réactives. Grâce à cette dépendance, nous pouvons rapidement mettre en place des endpoints RESTful pour exposer les fonctionnalités de notre passerelle.
+
+3. **spring-boot-starter-oauth2-resource-server** :
+   Cette dépendance est cruciale pour sécuriser notre passerelle en tant que serveur de ressources OAuth2. Elle offre des fonctionnalités avancées de sécurité, telles que la vérification et la validation des jetons JWT (JSON Web Tokens) pour l'authentification et l'autorisation des utilisateurs. En utilisant OAuth2, nous pouvons protéger nos ressources et contrôler l'accès aux API exposées par notre passerelle.
+
+4. **spring-boot-starter-security** :
+   Cette dépendance fournit les fonctionnalités de sécurité de base pour notre application Spring Boot. Elle nous permet de sécuriser les endpoints de notre passerelle en définissant des règles d'accès et des autorisations pour les utilisateurs authentifiés. Avec cette dépendance, nous pouvons mettre en place des stratégies de sécurité robustes pour protéger notre application contre les attaques et les intrusions.
+
+5. **org.projectlombok:lombok** :
+   Lombok est une bibliothèque Java qui simplifie le développement en réduisant la quantité de code source que nous devons écrire. Il offre des annotations telles que @Getter, @Setter et @Builder, qui génèrent automatiquement le code boilerplate, comme les méthodes getter et setter, les constructeurs, etc. L'utilisation de Lombok nous permet d'améliorer la lisibilité et la maintenabilité de notre code en réduisant la quantité de code répétitif.
+
+6. **spring-cloud-starter-gateway** :
+   Cette dépendance est spécifique à Spring Cloud et fournit les outils nécessaires pour développer une passerelle (gateway) avec Spring Boot. Elle nous permet de router et de filtrer les requêtes HTTP entrantes vers les services backend en fonction de différents critères, tels que l'URL, les en-têtes HTTP, les méthodes HTTP, etc. Grâce à cette dépendance, nous pouvons mettre en place une architecture de passerelle robuste et extensible pour notre application.
+
+7. **spring-cloud-starter-netflix-eureka-client** :
+   Cette dépendance nous permet d'intégrer notre passerelle au service de découverte Eureka. Eureka est un service de découverte de microservices qui permet à notre passerelle de découvrir et de communiquer avec les autres services disponibles dans l'environnement. En utilisant Eureka, notre passerelle peut dynamiquement découvrir et s'adapter aux changements dans le paysage des services, ce qui améliore la résilience et la scalabilité de notre application.
+
+8. **spring-boot-starter-test** et **spring-security-test** :
+   Ces dépendances fournissent les outils nécessaires pour écrire et exécuter des tests unitaires et d'intégration pour notre application Spring Boot. Les tests unitaires sont essentiels pour garantir la qualité et la fiabilité de notre code, tandis que les tests d'intégration nous permettent de valider le comportement global de notre application et de ses interactions avec d'autres composants du système.
+
+Pour assurer la sécurité de notre application Gateway, nous avons mis en place plusieurs mesures et utilisé des dépendances spécifiques. Voici une explication détaillée de notre approche en matière de sécurité :
+
+1. **Dépendances de sécurité** :
+   - Nous avons inclus les dépendances `spring-boot-starter-security` et `spring-boot-starter-oauth2-resource-server` pour garantir un niveau de sécurité robuste. Ces dépendances fournissent les fonctionnalités nécessaires pour sécuriser nos endpoints et gérer l'authentification et l'autorisation des utilisateurs.
+   - L'utilisation de `spring-security-test` dans les dépendances de test nous permet d'écrire et d'exécuter des tests pour vérifier le comportement de notre système en matière de sécurité.
+
+2. **Configuration de la sécurité** :
+   - La classe `SecurityConfiguration` est une classe de configuration Spring qui définit la configuration de sécurité pour notre application. Elle est annotée avec `@Configuration` et `@EnableWebSecurity` pour indiquer qu'elle contient des configurations de sécurité pour l'application Web.
+   - Nous avons désactivé la protection CSRF (Cross-Site Request Forgery) avec `.csrf(AbstractHttpConfigurer::disable)`. Cette mesure est souvent désactivée dans les applications qui utilisent JWT (JSON Web Tokens) pour l'authentification, car JWT offre une protection suffisante contre les attaques CSRF.
+   - Les requêtes sont autorisées pour tous les endpoints authentifiés avec `.authorizeHttpRequests(req -> req.anyRequest().authenticated())`. Cela garantit que seuls les utilisateurs authentifiés peuvent accéder à nos ressources.
+   - Nous avons configuré notre application pour utiliser OAuth2 Resource Server avec JWT pour l'authentification. Cela se fait avec `http.oauth2ResourceServer()`, où nous avons spécifié les détails JWT, tels que l'URI de l'émetteur (issuer URI) et l'URI du jeu de clés (JWK set URI).
+   - Nous avons configuré la gestion de session comme STATELESS avec `http.sessionManagement()`, ce qui signifie que notre application ne maintient pas d'état de session pour les utilisateurs. Cela rend notre application plus résiliente aux attaques de type session.
+
+3. **Gestion des autorisations** :
+   - Nous avons utilisé `JwtAuthenticationConverter` pour extraire les informations d'autorisation à partir du jeton JWT. Nous avons spécifié un `JwtGrantedAuthoritiesConverter` personnalisé pour définir le préfixe des autorités, si nécessaire.
+   - Cela nous permet de contrôler finement les autorisations attribuées à chaque utilisateur en fonction des rôles et des autorisations inclus dans le jeton JWT.
+
+4. **Sécurité Docker** :
+   - Nous avons inclus des directives de sécurité dans notre fichier Dockerfile pour garantir que notre application s'exécute de manière sécurisée dans un environnement de conteneur. Par exemple, nous avons défini un utilisateur non privilégié pour exécuter l'application dans le conteneur Docker.
+
+En combinant ces mesures de sécurité, nous assurons un niveau de sécurité élevé pour notre passerelle (Gateway), garantissant que seuls les utilisateurs authentifiés et autorisés peuvent accéder à nos ressources, tout en réduisant les risques d'attaques et de violations de la sécurité.
